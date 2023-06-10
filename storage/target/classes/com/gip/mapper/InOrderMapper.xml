@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gip.mapper.InOrderMapper">
+
+<select id="findAllInOrder" resultType="inorder">
+    SELECT * FROM
+        jj.in_order
+            left join jj.employee
+                      on employee_id = order_employee_id
+            left join jj.supplier
+                      on supplier_id=order_supplier_id
+            left join jj.`storage`
+                      on storage_id=order_storage_id
+            left join jj.product
+                      on product_id=order_product_id
+</select>
+    <select id="findAllInOrderByIf" parameterType="inorder" resultType="inorder">
+        SELECT * FROM
+        jj.in_order
+        left join jj.employee
+        on employee_id = order_employee_id
+        left join jj.supplier
+        on supplier_id=order_supplier_id
+        left join jj.`storage`
+        on storage_id=order_storage_id
+        left join jj.product
+        on product_id=order_product_id
+        <where>
+            <if test="orderId != null and orderId !=''">
+                and order_id=#{orderId}
+            </if>
+            <if test="orderSupplierId != null and orderSupplierId!=''">
+                and order_supplier_id=#{orderSupplierId}
+            </if>
+            <if test="orderStorageId != null and orderStorageId!=''">
+                and order_storage_id=#{orderStorageId}
+            </if>
+            <if test="true">
+                and employee_id=order_employee_id and supplier_id=order_supplier_id and product_id=order_product_id and storage_id=order_storage_id
+            </if>
+        </where>
+    </select>
+<update id="addInOrder" parameterType="inorder">
+    insert into jj.in_order(order_date, order_supplier_id, order_storage_id, order_employee_id, order_product_id, order_product_num)
+    values (#{orderDate},#{orderSupplierId},#{orderStorageId},#{orderEmployeeId},#{orderProductId},#{orderProductNum});
+</update>
+
+    <select id="findInorderReport" parameterType="inorder" resultType="inorder">
+        SELECT * FROM
+        jj.in_order
+        left join jj.employee
+        on employee_id = order_employee_id
+        left join jj.supplier
+        on supplier_id=order_supplier_id
+        left join jj.`storage`
+        on storage_id=order_storage_id
+        left join jj.product
+        on product_id=order_product_id
+        <where>
+            <if test="orderId != null and orderId !=''">
+                and order_id=#{orderId}
+            </if>
+            <if test="orderSupplierId != null and orderSupplierId!=''">
+                and order_supplier_id=#{orderSupplierId}
+            </if>
+            <if test="orderStorageId != null and orderStorageId!=''">
+                and order_storage_id=#{orderStorageId}
+            </if>
+            <if test="orderProductId != null and orderProductId!=''">
+                and order_product_id=#{orderProductId}
+            </if>
+            <if test="startDay != null and endDay!=null">
+               and order_date between #{startDay} and #{endDay}
+            </if>
+        </where>
+    </select>
+
+    <select id="countMonthData" resultType="int">
+        SELECT count(*) FROM jj.in_order WHERE DATE_FORMAT( order_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+    </select>
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gip.mapper.ProductMapper">
+
+<select id="findAllProduct" resultType="product">
+select * from jj.product,jj.dict where product_type=dict_type_code and dict_type_name='商品类别'
+</select>
+    <select id="findAllProductByIf" parameterType="product" resultType="product">
+        select * from jj.product,jj.dict
+        <where>
+            <if test="productId != null and productId !=''">
+                and product_id=#{productId}
+            </if>
+            <if test="productName != null and productName !=''">
+                and product_name like '%${productName}%'
+            </if>
+            <if test="productType != null and productType!=''">
+                and product_type=#{productType}
+            </if>
+            <if test="true">
+                and product_type=dict_type_code and dict_type_name='商品类别'
+            </if>
+        </where>
+    </select>
+
+</mapper>

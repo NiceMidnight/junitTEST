@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gip.mapper.OutOrderMapper">
+
+   <select id="findAllOutOrder" resultType="outorder">
+       select *
+       from jj.out_order
+                left join jj.employee
+                          on employee_id = order_employee_id
+                left join jj.customer
+                          on customer_id=order_customer_id
+                left join jj.`storage`
+                          on storage_id=order_storage_id
+                left join jj.product
+                          on product_id=order_product_id
+   </select>
+
+    <select id="findAllOutOrderByIf" parameterType="outorder" resultType="outorder">
+        select * from jj.out_order
+        left join jj.employee
+        on employee_id = order_employee_id
+        left join jj.customer
+        on customer_id=order_customer_id
+        left join jj.`storage`
+        on storage_id=order_storage_id
+        left join jj.product
+        on product_id=order_product_id
+        <where>
+            <if test="orderId != null and orderId !=''">
+                and order_id=#{orderId}
+            </if>
+            <if test="orderCustomerId != null and orderCustomerId!=''">
+                and order_customer_id=#{orderCustomerId}
+            </if>
+            <if test="orderStorageId != null and orderStorageId!=''">
+                and order_storage_id=#{orderStorageId}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addOutOrder" parameterType="outorder">
+        insert into jj.out_order(order_date, order_customer_id, order_storage_id, order_employee_id, order_product_id, order_product_num)
+        values (#{orderDate},#{orderCustomerId},#{orderStorageId},#{orderEmployeeId},#{orderProductId},#{orderProductNum});
+    </insert>
+
+</mapper>

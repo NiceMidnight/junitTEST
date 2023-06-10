@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gip.mapper.SupplierMapper">
+
+<select id="findAllSuppliers" resultType="supplier">
+select * from jj.supplier
+</select>
+<select id="findAllSuppliersByIf" resultType="supplier">
+select * from jj.supplier
+<where>
+    <if test="supplierId != null  ">
+        and supplier_id=#{supplierId}
+    </if>
+    <if test="supplierName != null and supplierName !=''">
+    and supplier_name like '%${supplierName}%'
+    </if>
+    <if test="supplierAddress != null and supplierAddress !=''">
+        and supplier_address like '%${supplierAddress}%'
+    </if>
+    <if test="supplierPhone != null and supplierPhone !=''">
+        and supplier_phone=#{supplierPhone}
+    </if>
+</where>
+</select>
+    <insert id="addSupplier" parameterType="supplier">
+        insert into jj.supplier(supplier_name, supplier_address, supplier_phone)
+        values (#{supplierName}, #{supplierAddress}, #{supplierPhone});
+    </insert>
+    <delete id="deleteSupplier" parameterType="int">
+        delete from jj.supplier where supplier_id=#{id}
+    </delete>
+    <update id="updateSupplier" parameterType="supplier">
+        UPDATE jj.supplier
+        <set>
+            <if test="supplierAddress != null and supplierAddress!=''">
+                supplier_address=#{supplierAddress},
+            </if>
+            <if test="supplierName != null and supplierName!=''">
+                supplier_name=#{supplierName},
+            </if>
+            <if test="supplierPhone != null and supplierPhone!=''">
+                supplier_phone=#{supplierPhone},
+            </if>
+        </set>
+        WHERE supplier_id = #{supplierId}
+    </update>
+    <select id="findSupplierById" parameterType="int" resultType="supplier">
+        select * from jj.supplier where supplier_id=#{id}
+    </select>
+
+</mapper>

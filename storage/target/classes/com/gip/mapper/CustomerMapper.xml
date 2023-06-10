@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gip.mapper.CustomerMapper">
+
+<select id="findAllCustomer" resultType="customer">
+    select *
+    from jj.customer
+</select>
+    <select id="findAllCustomerByIf" resultType="customer">
+        select * from jj.customer
+        <where>
+            <if test="customerId != null and customerId !=''">
+                and customer_id=#{customerId}
+            </if>
+            <if test="customerName != null and customerName !=''">
+                and customer_name like '%${customerName}%'
+            </if>
+            <if test="customerPhone != null and customerPhone!=''">
+                and customer_phone=#{customerPhone}
+            </if>
+        </where>
+    </select>
+    <insert id="addCustomer" parameterType="customer">
+        insert into jj.customer(customer_name,customer_address,customer_phone,customer_email)
+        values (#{customerName},#{customerAddress},#{customerPhone},#{customerEmail});
+    </insert>
+    <delete id="deleteCustomer" parameterType="int">
+        delete from jj.customer where customer_id=#{id}
+    </delete>
+    <update id="updateCustomer" parameterType="customer">
+        update jj.customer
+        <set>
+            <if test="customerName != null and customerName !=''">
+                customer_name=#{customerName},
+            </if>
+            <if test="customerAddress != null and customerAddress !=''">
+                customer_addresss=#{customerAddress},
+            </if>
+            <if test="customerPhone != null and customerPhone !=''">
+                customer_phone=#{customerPhone},
+            </if>
+            <if test="customerEmail != null and customerEmail !=''">
+                customer_email=#{customerEmail},
+            </if>
+        </set>
+            where customer_id=#{customerId}
+    </update>
+    <select id="findCustomerById" parameterType="int" resultType="customer">
+        select * from jj.customer where customer_id=#{id}
+    </select>
+    <select id="countCustomer" resultType="int">
+        select count(0) from jj.customer
+    </select>
+</mapper>

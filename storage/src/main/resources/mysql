@@ -1,0 +1,5 @@
+Class.forName("com.mysql.cj.jdbc.Driver");
+Connection conn = DriverManager.getConnection(
+  "jdbc:mysql://aws.connect.psdb.cloud/jj?sslMode=VERIFY_IDENTITY",
+  "gjulh2wxcaqq9a4lp1ef",
+  "************");

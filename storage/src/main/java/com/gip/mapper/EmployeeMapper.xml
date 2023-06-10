@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gip.mapper.EmployeeMapper">
+
+    <select id="findEmployeeById" resultType="employee">
+        select * from jj.employee,jj.dict where employee_id=#{id} and employee_role=dict_type_code and dict_type_name='role'
+    </select>
+
+    <update id="updateEmployeeById"  parameterType="employee">
+        update jj.employee
+        <trim prefix="set" suffixOverrides=",">
+            <if test="employeeName!=null and employeeName!=''">
+                employee_name=#{employeeName},
+            </if>
+            <if test="employeePassword!=null and employeePassword!=''">
+                employee_password=#{employeePassword},
+            </if>
+            <if test="employeeSex!=null">
+                employee_sex=#{employeeSex},
+            </if>
+            <if test="employeePhone!=null and employeePhone!=''">
+                employee_phone=#{employeePhone},
+            </if>
+            <if test="employeeRole!=null">
+                employee_role=#{employeeRole},
+            </if>
+        </trim>
+        WHERE employee_id=#{employeeId}
+    </update>
+
+    <select id="countEmployee" resultType="int">
+        select count(0)
+        from jj.employee
+    </select>
+
+</mapper>
